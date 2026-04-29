@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Quiz Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="site-header">
+    <div class="project-title">Quiz Generator- Method 1</div>
+    <div class="project-sub">NLP Based MCQ Generation</div>
+</header>
+
+<!-- ── UPLOAD SCREEN ── -->
+<div id="screen-upload" class="screen active">
+    <div class="upload-container">
+        <h2>Generate Quiz from Your Notes</h2>
+        <p class="sub">Upload a PDF, PPTX, DOCX or TXT file and we'll generate multiple choice questions from the content.</p>
+
+        <div id="drop-area">
+            <div class="drop-icon">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+            </div>
+            <p class="drop-text">Drag & drop your file here</p>
+            <p class="drop-sub">Supported: PDF, PPTX, DOCX, TXT</p>
+            <button id="browseBtn" class="btn-browse">Browse File</button>
+            <input type="file" id="fileInput" hidden accept=".pdf,.docx,.pptx,.txt">
+        </div>
+
+        <div id="file-info" class="file-info hidden">
+            <div class="file-icon">📄</div>
+            <div class="file-name-wrap">
+                <span id="file-name-text"></span>
+                <button id="removeFile" class="remove-btn">✕</button>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <label for="numQuestions">Number of Questions:</label>
+            <select id="numQuestions">
+                <option value="10">10</option>
+                <option value="15" selected>15</option>
+                <option value="20">20</option>
+            </select>
+        </div>
+
+        <button id="submitBtn" class="btn-primary" disabled>Generate Quiz</button>
+        <div id="error-msg" class="error-msg hidden"></div>
+    </div>
+</div>
+
+<!-- ── LOADING SCREEN ── -->
+<div id="screen-loading" class="screen">
+    <div class="loading-box">
+        <div class="loader-ring"></div>
+        <p class="loading-title">Processing document...</p>
+        <div class="loading-steps">
+            <div class="step" id="step-1">Extracting text</div>
+            <div class="step" id="step-2">Scoring sentences with TF-IDF</div>
+            <div class="step" id="step-3">Running LDA topic modeling</div>
+            <div class="step" id="step-4">Identifying keywords with spaCy</div>
+            <div class="step" id="step-5">Building questions</div>
+        </div>
+    </div>
+</div>
+
+<!-- ── QUIZ SCREEN ── -->
+<div id="screen-quiz" class="screen">
+    <div class="quiz-topbar">
+        <span id="topic-badge" class="topic-badge"></span>
+        <span id="q-counter" class="q-counter"></span>
+    </div>
+    <div class="progress-bar-wrap">
+        <div id="progress-bar" class="progress-bar"></div>
+    </div>
+    <div class="quiz-body">
+        <div id="question-card" class="question-card">
+            <p id="question-text" class="question-text"></p>
+            <div id="options-grid" class="options-grid"></div>
+            <button id="nextBtn" class="btn-primary btn-next" disabled>Next</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── RESULT SCREEN ── -->
+<div id="screen-result" class="screen">
+    <div class="result-box">
+        <div class="score-circle">
+            <span id="score-num" class="score-big"></span>
+            <span id="score-denom" class="score-small"></span>
+        </div>
+        <h2 id="result-title" class="result-title"></h2>
+        <p id="result-sub" class="result-sub"></p>
+        <div id="topic-breakdown" class="topic-breakdown"></div>
+        <div class="result-actions">
+            <button id="retryBtn" class="btn-outline">Try Again</button>
+            <button id="newFileBtn" class="btn-primary">Upload New File</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
